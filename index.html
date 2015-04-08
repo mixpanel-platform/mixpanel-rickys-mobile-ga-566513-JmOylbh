@@ -9,6 +9,7 @@
   </head>
   <body class="mixpanel-platform-body">
     <div class="mixpanel-platform-section">
+      <div id="selection">
         <div id="eventName" style="float: left;"></div>
         <div id="by" class="mixpanel-platform-label" style="margin-left: 10px; display: none;">by</div>
         <div id="eventProp" style="float: left;"></div>
@@ -18,16 +19,17 @@
         <div id="divisorInterval" style="float: left;"></div>
         <div style="clear: left"></div>
         <div style="clear: both;"></div>
-        <div id="graph">
-          <div style="clear: both;"></div>
-        </div>
+      </div> 
+      <div id="graph">
+        <div style="clear: both;"></div>
+      </div>
     </div>
     <script>
      var opts = {
         lines: 17, // The number of lines to draw
         length: 0, // The length of each line
         width: 6, // The line thickness
-        radius: 30, // The radius of the inner circle
+        radius: 20, // The radius of the inner circle
         corners: 1, // Corner roundness (0..1)
         rotate: 0, // The rotation offset
         direction: 1, // 1: clockwise, -1: counterclockwise
@@ -39,9 +41,9 @@
         className: 'spinner', // The CSS class to assign to the spinner
         zIndex: 2e9, // The z-index (defaults to 2000000000)
         top: '50%', // Top position relative to parent
-        left: '50%' // Left position relative to parent
+        left: '75%' // Left position relative to parent
       };
-      var target = document.getElementById('graph');
+      var target = document.getElementById('selection');
       MP.api.ready(function() {
         $('#over').show();
         // replace with event name of your choice
@@ -75,6 +77,8 @@
 
         // Make 2 segmentation queries
         var runQuery = function() {
+          $('#graph').empty();
+          var chart = $('#graph').MPChart({ chartType: 'line' });
           var spinner = new Spinner(opts).spin(target); 
           var segmentationStr = 'properties["' + segmentation.val() + '"]'
           var $dividend = MP.api.segment(eventName.val(), {
@@ -123,7 +127,6 @@
             console.log (data)
             spinner.stop();
             $("#loading").hide();
-            var chart = $('#graph').MPChart({ chartType: 'line' });
             chart.MPChart('setData', data);
           });
         };
